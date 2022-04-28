@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MeetupFilterDTO {
 
-    private String registration;
+    private String personId;
 
     private  String event;
 }

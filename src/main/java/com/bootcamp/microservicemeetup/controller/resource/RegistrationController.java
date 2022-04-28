@@ -1,8 +1,12 @@
 package com.bootcamp.microservicemeetup.controller.resource;
 
 import com.bootcamp.microservicemeetup.controller.dto.RegistrationDTO;
+import com.bootcamp.microservicemeetup.model.entity.Meetup;
 import com.bootcamp.microservicemeetup.model.entity.Registration;
+import com.bootcamp.microservicemeetup.service.MeetupService;
 import com.bootcamp.microservicemeetup.service.RegistrationService;
+import java.util.ArrayList;
+import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -20,18 +24,23 @@ import java.util.stream.Collectors;
 public class RegistrationController {
 
     private RegistrationService registrationService;
-
+    private final MeetupService meetupService;
     private ModelMapper modelMapper;
 
-
-    public RegistrationController(RegistrationService registrationService, ModelMapper modelMapper) {
+    public RegistrationController(RegistrationService registrationService, MeetupService meetupService, ModelMapper modelMapper) {
         this.registrationService = registrationService;
+        this.meetupService = meetupService;
         this.modelMapper = modelMapper;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RegistrationDTO create(@RequestBody @Valid RegistrationDTO dto) {
+
+        //verificar se o meetup existe
+        Meetup meetup = meetupService.getById(dto.getMeetupId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+        // falta criar teste com o meetup que existe e que não
 
         Registration entity = modelMapper.map(dto, Registration.class);
         entity = registrationService.save(entity);
