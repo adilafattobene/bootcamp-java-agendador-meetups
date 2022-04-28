@@ -48,7 +48,7 @@ public class RegistrationServiceTest {
         Registration registration = createValidRegistration();
 
         // excucao
-        Mockito.when(repository.existsByRegistration(Mockito.anyString())).thenReturn(false);
+        Mockito.when(repository.existsByPersonId(Mockito.anyString())).thenReturn(false);
         Mockito.when(repository.save(registration)).thenReturn(createValidRegistration());
 
         Registration savedRegistration = registrationService.save(registration);
@@ -57,7 +57,7 @@ public class RegistrationServiceTest {
         assertThat(savedRegistration.getId()).isEqualTo(101);
         assertThat(savedRegistration.getName()).isEqualTo("Ana Neri");
         assertThat(savedRegistration.getDateOfRegistration()).isEqualTo("01/04/2022");
-        assertThat(savedRegistration.getRegistration()).isEqualTo("001");
+        assertThat(savedRegistration.getPersonId()).isEqualTo("001");
 
     }
 
@@ -67,7 +67,7 @@ public class RegistrationServiceTest {
     public void shouldNotSAveAsRegistrationDuplicated() {
 
         Registration registration = createValidRegistration();
-        Mockito.when(repository.existsByRegistration(Mockito.any())).thenReturn(true);
+        Mockito.when(repository.existsByPersonId(Mockito.any())).thenReturn(true);
 
         Throwable exception = Assertions.catchThrowable( () -> registrationService.save(registration));
         assertThat(exception)
@@ -95,7 +95,7 @@ public class RegistrationServiceTest {
         assertThat(foundRegistration.get().getId()).isEqualTo(id);
         assertThat(foundRegistration.get().getName()).isEqualTo(registration.getName());
         assertThat(foundRegistration.get().getDateOfRegistration()).isEqualTo(registration.getDateOfRegistration());
-        assertThat(foundRegistration.get().getRegistration()).isEqualTo(registration.getRegistration());
+        assertThat(foundRegistration.get().getPersonId()).isEqualTo(registration.getPersonId());
 
     }
 
@@ -142,7 +142,7 @@ public class RegistrationServiceTest {
         assertThat(registration.getId()).isEqualTo(updatedRegistration.getId());
         assertThat(registration.getName()).isEqualTo(updatedRegistration.getName());
         assertThat(registration.getDateOfRegistration()).isEqualTo(updatedRegistration.getDateOfRegistration());
-        assertThat(registration.getRegistration()).isEqualTo(updatedRegistration.getRegistration());
+        assertThat(registration.getPersonId()).isEqualTo(updatedRegistration.getPersonId());
 
     }
 
@@ -177,16 +177,16 @@ public class RegistrationServiceTest {
 
         String registrationAttribute = "1234";
 
-        Mockito.when(repository.findByRegistration(registrationAttribute))
-                .thenReturn(Optional.of(Registration.builder().id(11).registration(registrationAttribute).build()));
+        Mockito.when(repository.findByPersonId(registrationAttribute))
+                .thenReturn(Optional.of(Registration.builder().id(11).personId(registrationAttribute).build()));
 
         Optional<Registration> registration  = registrationService.getRegistrationByRegistrationAttribute(registrationAttribute);
 
         assertThat(registration.isPresent()).isTrue();
         assertThat(registration.get().getId()).isEqualTo(11);
-        assertThat(registration.get().getRegistration()).isEqualTo(registrationAttribute);
+        assertThat(registration.get().getPersonId()).isEqualTo(registrationAttribute);
 
-        Mockito.verify(repository, Mockito.times(1)).findByRegistration(registrationAttribute);
+        Mockito.verify(repository, Mockito.times(1)).findByPersonId(registrationAttribute);
 
     }
 
@@ -196,7 +196,7 @@ public class RegistrationServiceTest {
                 .id(101)
                 .name("Ana Neri")
                 .dateOfRegistration("01/04/2022")
-                .registration("001")
+                .personId("001")
                 .build();
     }
 

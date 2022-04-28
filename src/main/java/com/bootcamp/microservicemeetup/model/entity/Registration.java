@@ -1,12 +1,12 @@
 package com.bootcamp.microservicemeetup.model.entity;
 
+import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -19,18 +19,18 @@ public class Registration {
     @Id
     @Column(name = "registration_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer id; //número da inscrição
 
     @Column(name = "person_name")
     private String name;
 
+    @Column(name = "person_id")
+    private String personId;
+
     @Column(name = "date_of_registration")
     private String dateOfRegistration;
 
-    @Column
-    private String registration;
-
-    @OneToMany(mappedBy = "registration")
-    private List<Meetup> meetups;
+    @ManyToOne
+    private Meetup meetup;
 
 }
